@@ -1,10 +1,23 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Image } from "react-native";
 
-const FilmItem = ({ title, vote_average, overview, release_date }) => {
+const FilmItem = ({
+  title,
+  vote_average,
+  overview,
+  release_date,
+  poster_path,
+}) => {
+  const getImageFromApi = (name) => {
+    return "https://image.tmdb.org/t/p/w300" + name;
+  };
+
   return (
     <View style={styles.main_container}>
-      <View style={styles.image_container} />
+      <Image
+        style={styles.image_container}
+        source={{ uri: getImageFromApi(poster_path) }}
+      />
       <View style={styles.content_container}>
         <View style={styles.header_container}>
           <View style={styles.title_container}>

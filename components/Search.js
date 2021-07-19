@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { StyleSheet, View, Button, TextInput, FlatList } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Button,
+  TextInput,
+  FlatList,
+  ActivityIndicator,
+} from "react-native";
 import FilmItem from "./FilmItem";
 import axios from "axios";
 import API_TOKEN from "../API/TMDBApi";
@@ -11,6 +18,7 @@ const Search = () => {
   let searchText = "";
 
   const loadFilms = async () => {
+    setLoading(true);
     if (searchText.length > 0) {
       try {
         const url =
@@ -38,9 +46,14 @@ const Search = () => {
         style={styles.textInput}
         placeholder="Titre du film"
         onChangeText={(text) => handleSearchText(text)}
+        onSubmitEditing={loadFilms}
       />
       <Button style={styles.button} title="Rechercher" onPress={loadFilms} />
-      {!loading && (
+      {loading ? (
+        <View style={styles.loading_container}>
+          <ActivityIndicator size="large" />
+        </View>
+      ) : (
         <FlatList
           data={films}
           keyExtractor={(item) => item.id.toString()}
@@ -68,5 +81,14 @@ const styles = StyleSheet.create({
   },
   button: {
     height: 50,
+  },
+  loading_container: {
+    position: "absolute",
+    left: 0,
+    right: 0,
+    top: 100,
+    bottom: 0,
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
