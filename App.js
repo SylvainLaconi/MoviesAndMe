@@ -1,14 +1,12 @@
+import "react-native-gesture-handler";
 import React from "react";
-import Search from "./components/Search";
-import { View, StyleSheet } from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
+import Stack from "./Navigation/Navigation";
 
 export default function App() {
-  return <Search />;
+  return (
+    <NavigationContainer>
+      <Stack />
+    </NavigationContainer>
+  );
 }
-
-const styles = StyleSheet.create({
-  mainContainer: {
-    flex: 1,
-    backgroundColor: "blue",
-  },
-});

@@ -8,37 +8,47 @@ import {
   ActivityIndicator,
 } from "react-native";
 import FilmItem from "./FilmItem";
-import axios from "axios";
-import API_TOKEN from "../API/TMDBApi";
+import { getFilmsListFromApi } from "../API/TMDBApi";
 
-const Search = () => {
+const Search = ({ navigation: { navigate } }) => {
   const [films, setFilms] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+  const [searchText, setSearchText] = useState("");
 
-  let searchText = "";
+  const handleSearchText = (text) => {
+    setSearchText(text);
+    setFilms([]);
+    setCurrentPage(1);
+    setTotalPages(0);
+  };
 
-  const loadFilms = async () => {
-    setLoading(true);
+  const loadFilms = () => {
     if (searchText.length > 0) {
-      try {
-        const url =
-          "https://api.themoviedb.org/3/search/movie?api_key=" +
-          API_TOKEN +
-          "&language=fr&query=" +
-          searchText;
-        const dataMovies = await axios.get(url);
-        setFilms(dataMovies.data.results);
-      } catch (error) {
-        console.log(error);
-      } finally {
+      setLoading(true);
+      getFilmsListFromApi(searchText, currentPage).then((data) => {
+        setTotalPages(data.total_pages);
+        setCurrentPage(data.page);
+        setFilms([...films, ...data.results]);
         setLoading(false);
-      }
+      });
     }
   };
 
-  const handleSearchText = (text) => {
-    searchText = text;
+  const onEndReachedFunction = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+      loadFilms(searchText, currentPage + 1);
+    }
   };
+
+  const displayFilmDetails = (idFilm) => {
+    navigate("FilmDetail", { idFilm: idFilm });
+  };
+
+  console.log(currentPage);
+  console.log(totalPages);
 
   return (
     <View style={styles.main_container}>
@@ -46,9 +56,13 @@ const Search = () => {
         style={styles.textInput}
         placeholder="Titre du film"
         onChangeText={(text) => handleSearchText(text)}
-        onSubmitEditing={loadFilms}
+        onSubmitEditing={() => loadFilms(searchText, currentPage)}
       />
-      <Button style={styles.button} title="Rechercher" onPress={loadFilms} />
+      <Button
+        style={styles.button}
+        title="Rechercher"
+        onPress={() => loadFilms(searchText, currentPage)}
+      />
       {loading ? (
         <View style={styles.loading_container}>
           <ActivityIndicator size="large" />
@@ -57,7 +71,11 @@ const Search = () => {
         <FlatList
           data={films}
           keyExtractor={(item) => item.id.toString()}
-          renderItem={({ item }) => <FilmItem {...item} />}
+          renderItem={({ item }) => (
+            <FilmItem {...item} displayFilmDetails={displayFilmDetails} />
+          )}
+          onEndReachedThreshold={0.5}
+          onEndReached={() => onEndReachedFunction()}
         />
       )}
     </View>
@@ -69,7 +87,6 @@ export default Search;
 const styles = StyleSheet.create({
   main_container: {
     flex: 1,
-    marginTop: 40,
   },
   textInput: {
     marginLeft: 5,
