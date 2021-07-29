@@ -1,5 +1,6 @@
 import React from "react";
-import { View, Text, StyleSheet, Image } from "react-native";
+import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
+import { getImageFromApi } from "../API/TMDBApi";
 
 const FilmItem = ({
   title,
@@ -7,13 +8,14 @@ const FilmItem = ({
   overview,
   release_date,
   poster_path,
+  displayFilmDetails,
+  id,
 }) => {
-  const getImageFromApi = (name) => {
-    return "https://image.tmdb.org/t/p/w300" + name;
-  };
-
   return (
-    <View style={styles.main_container}>
+    <TouchableOpacity
+      style={styles.main_container}
+      onPress={() => displayFilmDetails(id)}
+    >
       <Image
         style={styles.image_container}
         source={{ uri: getImageFromApi(poster_path) }}
@@ -36,7 +38,7 @@ const FilmItem = ({
           <Text style={styles.date_text}>Sorti le {release_date}</Text>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 
