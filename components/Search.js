@@ -47,9 +47,6 @@ const Search = ({ navigation: { navigate } }) => {
     navigate("FilmDetail", { idFilm: idFilm });
   };
 
-  console.log(currentPage);
-  console.log(totalPages);
-
   return (
     <View style={styles.main_container}>
       <TextInput

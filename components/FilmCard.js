@@ -5,7 +5,6 @@ import moment from "moment";
 import numeral from "numeral";
 
 const FilmCard = ({ film }) => {
-  console.log(film);
   return (
     <ScrollView style={styles.scrollview_container}>
       <View>
