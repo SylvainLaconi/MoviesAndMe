@@ -1,5 +1,7 @@
 import React from "react";
+import { useEffect, useState } from "react";
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
+import { useSelector } from "react-redux";
 import { getImageFromApi } from "../API/TMDBApi";
 
 const FilmItem = ({
@@ -11,6 +13,22 @@ const FilmItem = ({
   displayFilmDetails,
   id,
 }) => {
+  const favorites = useSelector((state) => state.favoritesFilms);
+
+  const [isFavorite, setIsFavorite] = useState(false);
+
+  const ToggleFavorite = () => {
+    if (favorites.findIndex((item) => item.id === id) !== -1) {
+      setIsFavorite(true);
+    } else {
+      setIsFavorite(false);
+    }
+  };
+
+  useEffect(() => {
+    ToggleFavorite();
+  }, [favorites]);
+
   return (
     <TouchableOpacity
       style={styles.main_container}
@@ -23,6 +41,12 @@ const FilmItem = ({
       <View style={styles.content_container}>
         <View style={styles.header_container}>
           <View style={styles.title_container}>
+            {isFavorite && (
+              <Image
+                style={styles.favorite_image}
+                source={require("../Images/ic_favorite.png")}
+              />
+            )}
             <Text style={styles.title_text}>{title}</Text>
           </View>
           <View style={styles.vote_container}>
@@ -73,6 +97,7 @@ const styles = StyleSheet.create({
   },
   title_container: {
     flex: 4,
+    flexDirection: "row",
     justifyContent: "center",
   },
   vote_container: {
@@ -99,5 +124,9 @@ const styles = StyleSheet.create({
   date_text: {
     fontSize: 14,
     textAlign: "right",
+  },
+  favorite_image: {
+    width: 20,
+    height: 20,
   },
 });

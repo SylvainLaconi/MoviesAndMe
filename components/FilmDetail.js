@@ -1,11 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  Text,
-  View,
-  ActivityIndicator,
-  StyleSheet,
-  ScrollView,
-} from "react-native";
+import { View, ActivityIndicator, StyleSheet } from "react-native";
 import { getFilmDetailFromApi } from "../API/TMDBApi";
 import FilmCard from "./FilmCard";
 
