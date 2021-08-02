@@ -1,7 +1,7 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { getImageFromApi } from "../API/TMDBApi";
 
 const FilmItem = ({
