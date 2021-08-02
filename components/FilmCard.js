@@ -1,10 +1,35 @@
-import React from "react";
-import { Text, View, StyleSheet, ScrollView, Image } from "react-native";
+import React, { useEffect, useState } from "react";
+import {
+  Text,
+  View,
+  StyleSheet,
+  ScrollView,
+  Image,
+  TouchableOpacity,
+} from "react-native";
 import { getImageFromApi } from "../API/TMDBApi";
 import moment from "moment";
 import numeral from "numeral";
+import { useDispatch, useSelector } from "react-redux";
 
 const FilmCard = ({ film }) => {
+  const favorites = useSelector((state) => state.favoritesFilms);
+  const dispatch = useDispatch();
+
+  const [isFavorite, setIsFavorite] = useState(false);
+
+  const ToggleFavorite = () => {
+    if (favorites.findIndex((item) => item.id === film.id) !== -1) {
+      setIsFavorite(true);
+    } else {
+      setIsFavorite(false);
+    }
+  };
+
+  useEffect(() => {
+    ToggleFavorite();
+  }, [favorites]);
+
   return (
     <ScrollView style={styles.scrollview_container}>
       <View>
@@ -15,6 +40,22 @@ const FilmCard = ({ film }) => {
       </View>
       <View style={styles.title_container}>
         <Text style={styles.text_title}>{film.title}</Text>
+        <TouchableOpacity
+          style={styles.favorite_container}
+          onPress={() => dispatch({ type: "TOGGLE_FAVORITE", value: film })}
+        >
+          {isFavorite ? (
+            <Image
+              style={styles.favorite_image}
+              source={require("../Images/ic_favorite.png")}
+            />
+          ) : (
+            <Image
+              style={styles.favorite_image}
+              source={require("../Images/ic_favorite_border.png")}
+            />
+          )}
+        </TouchableOpacity>
       </View>
       <View style={styles.overview_container}>
         <Text style={styles.text_overview}>{film.overview}</Text>
@@ -88,5 +129,12 @@ const styles = StyleSheet.create({
     marginLeft: 5,
     marginRight: 5,
     marginTop: 5,
+  },
+  favorite_container: {
+    alignItems: "center",
+  },
+  favorite_image: {
+    width: 40,
+    height: 40,
   },
 });
