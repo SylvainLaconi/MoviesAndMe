@@ -1,13 +1,8 @@
 import React, { useEffect, useState } from "react";
-import {
-  Text,
-  View,
-  ActivityIndicator,
-  StyleSheet,
-  ScrollView,
-} from "react-native";
+import { View, ActivityIndicator, StyleSheet } from "react-native";
 import { getFilmDetailFromApi } from "../API/TMDBApi";
 import FilmCard from "./FilmCard";
+import { connect } from "react-redux";
 
 const FilmDetail = ({ route }) => {
   const [film, setFilm] = useState(undefined);
@@ -33,7 +28,13 @@ const FilmDetail = ({ route }) => {
   );
 };
 
-export default FilmDetail;
+const mapStateToProps = (state) => {
+  return {
+    favoritesFilms: state.favoritesFilms,
+  };
+};
+
+export default connect(mapStateToProps)(FilmDetail);
 
 const styles = StyleSheet.create({
   main_container: {
