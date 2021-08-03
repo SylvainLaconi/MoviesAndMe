@@ -4,10 +4,9 @@ import {
   View,
   Button,
   TextInput,
-  FlatList,
   ActivityIndicator,
 } from "react-native";
-import FilmItem from "./FilmItem";
+import FilmList from "./FilmList";
 import { getFilmsListFromApi } from "../API/TMDBApi";
 
 const Search = ({ navigation: { navigate } }) => {
@@ -65,14 +64,12 @@ const Search = ({ navigation: { navigate } }) => {
           <ActivityIndicator size="large" />
         </View>
       ) : (
-        <FlatList
-          data={films}
-          keyExtractor={(item) => item.id.toString()}
-          renderItem={({ item }) => (
-            <FilmItem {...item} displayFilmDetails={displayFilmDetails} />
-          )}
-          onEndReachedThreshold={0.5}
-          onEndReached={() => onEndReachedFunction()}
+        <FilmList
+          films={films}
+          loadFilms={loadFilms}
+          navigate={navigate}
+          page={currentPage}
+          totalPages={totalPages}
         />
       )}
     </View>
