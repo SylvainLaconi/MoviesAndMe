@@ -12,11 +12,7 @@ const Tab = createBottomTabNavigator();
 const MyStack = () => {
   return (
     <Stack.Navigator>
-      <Stack.Screen
-        name="Rechercher"
-        component={Search}
-        options={{ title: "" }}
-      />
+      <Stack.Screen name="Search" component={Search} options={{ title: "" }} />
       <Stack.Screen
         name="FilmDetail"
         component={FilmDetail}
@@ -29,11 +25,11 @@ const MyStack = () => {
 const MyTabs = () => {
   return (
     <Tab.Navigator
-      tabBarOptions={{
-        showLabel: false,
-        showIcon: true,
-        activeBackgroundColor: "#DDDDDD",
-        inactiveBackgroundColor: "#FFFFFF",
+      screenOptions={{
+        tabBarShowLabel: false,
+        tabBarshowIcon: true,
+        tabBarActiveBackgroundColor: "#DDDDDD",
+        tabBarInactiveBackgroundColor: "#FFFFFF",
       }}
     >
       <Tab.Screen
